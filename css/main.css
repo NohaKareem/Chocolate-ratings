@@ -18,6 +18,10 @@ body {
   color: #696060;
 }
 
+.bold {
+  font-weight: bold;
+}
+
 .tooltip {
   margin-top: 5%;
   position: absolute;

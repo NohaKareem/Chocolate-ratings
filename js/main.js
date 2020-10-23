@@ -9,7 +9,7 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 
 	// data cleaning
 	let removePercent = str => { return parseFloat(str.slice(0, -1)); }
-
+	     console.log(dataset[0]['Company (Maker-if known)']);
 	let uniqueCocoaValues = [... new Set(dataset.map(choc => removePercent(choc['Cocoa Percent'])))];
 
 	// helper method to sort by cocoa
@@ -51,7 +51,7 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 	let all_chocolates = fourStar.concat(threeStar.concat(twoStar.concat(oneStar))); //~
 	let sortedChcolates = dataset.sort((c1, c2) => { return c1.Rating - c2.Rating || removePercent(c2['Cocoa Percent']) - removePercent(c1['Cocoa Percent']) });
 	console.log(sortedChcolates)
-	console.log(sortedChcolates[1360])
+	console.log(sortedChcolates[0])
 	console.log(sortedChcolates[1790])
 	console.log(all_chocolates)
 	console.log(all_chocolates[1360])
@@ -90,7 +90,7 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 		.append('rect')
 
 		// debug
-		.attr('stroke', '#3f2000')
+		.attr('stroke', '#180c01')//3f2000
 		.attr('stroke-width', '1')
 		
 		.attr('y', (d, i) => {	
@@ -111,10 +111,14 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 				.style('opacity', 1);
 
 			mouseToolTip.html(`
-			Cocoa: ${ d['Cocoa Percent'] }
+			<span class="bold">Cocoa:</span> ${ d['Cocoa Percent'] }
 			<br/>
-			Rating: ${ d['Rating'] }/5
-			`)
+			<span class="bold">Rating:</span> ${ d['Rating'] }/5
+			<br/>
+			<span class="bold">Company:</span> ${ d['Company (Maker-if known)'] } 
+			<br/> 
+			`
+			)//~
 				.style('left', `${ d3.event.pageX }px`)
 				.style('top', `${ d3.event.pageY }px`);
 				
