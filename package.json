@@ -1,0 +1,25 @@
+{
+  "name": "ChocolateRatings",
+  "version": "1.0.0",
+  "description": "Assignment for class 5010. Chocolate ratings visualized, built with D3.js.",
+  "main": "index.js",
+  "scripts": {
+    "lite": "lite-server --port 3000",
+    "start": "npm run lite"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NohaKareem/Chocolate-ratings.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NohaKareem/Chocolate-ratings/issues"
+  },
+  "homepage": "https://github.com/NohaKareem/Chocolate-ratings#readme",
+  "dependencies": {
+    "lite-server": "^1.3.1",
+    "d3": "^6.2.0"
+  }
+}

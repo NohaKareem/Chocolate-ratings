@@ -49,12 +49,7 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 
 	let all_chocolates = fiveStar.concat(fourStar.concat(threeStar.concat(twoStar.concat(oneStar)))); //~
 	let sortedChcolates = dataset.sort((c1, c2) => { return c1.Rating - c2.Rating || removePercent(c2['Cocoa Percent']) - removePercent(c1['Cocoa Percent']) });
-	console.log(sortedChcolates)
-	console.log(sortedChcolates[0])
-	console.log(sortedChcolates[1790])
-	console.log(all_chocolates)
-	console.log(all_chocolates[1360])
-
+	
 	let mouseToolTip = d3.select('#vis').append('div')
 		.attr('class', 'mouseTooltip')
 		.style('opacity', 0)
@@ -85,39 +80,25 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 	console.log('currwid', currWid)
 	
 	dispChocRatingBar = rating => {
+		let ratingDataseet = dataset.filter(choc => {
+			return (choc.Rating >= rating && choc.Rating < rating + 1);
+		}).sort(sortChocByCocoa);
+
 		svg.selectAll('rect')
-		.data(rating)
+		.data(ratingDataseet)
 		.enter()
 		.append('rect')
 
 		// debug
-		.attr('stroke', '#180c01')//3f2000
+		.attr('stroke', '#180c01')//3f2000~
 		.attr('stroke-width', '1')
 		
-		.attr('y', (d, i) => {	
-			console.log('y currorw', currRow)
-			return parseInt(i / MAX_BOXES_PER_ROW) * box_ht * 2.1;//~
-			// return (i % MAX_BOXES_PER_ROW) * box_ht * 2.1;//~
-			// return (i % MAX_BOXES_PER_ROW) * box_ht * 2.1;//~
-			// return (i % MAX_BOXES_PER_ROW) * currWid;
-			// return ((i % MAX_BOXES_PER_ROW) * 50); 
-			// return (i * all_chocolates.length / MAX_BOXES_PER_ROW) + (MARGIN * i); 
-		})
-		.attr('x', (d, i) => { 
-			// return ((i % MAX_BOXES_PER_ROW) * MARGIN * box_ht);
-			if (i % MAX_BOXES_PER_ROW == 0) currRow++;
-			console.log('currRow,', currRow)
-			console.log('currRow,', i%MAX_BOXES_PER_ROW)
-			return ((i % MAX_BOXES_PER_ROW) * currWid); 
-		
-		})// 
-		// .attr('x', (d, i) => { return ((i % MAX_BOXES_PER_ROW) * MARGIN * box_ht); })// 
-		.attr('width', currWid)//_ => { return currWid; } //return (all_chocolates.length / MAX_BOXES_PER_ROW) * MARGIN; })
+		.attr('y', (d, i) => { return parseInt(i / MAX_BOXES_PER_ROW) * box_ht * 2.1 })
+		.attr('x', (d, i) => { return ((i % MAX_BOXES_PER_ROW) * currWid); })
+		.attr('width', currWid)
 		.attr('height', box_ht * 2.2)
 		.attr('fill', (d) => { return cocoaColorScale(removePercent(d['Cocoa Percent'])); })
 		
-
-
 		// mouse tooltip
 		.on('mouseover', d => {
 			mouseToolTip.transition()
@@ -143,9 +124,14 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 		});
 
 	}
+	dispChocRatingBar(3);
 
 	// dispChocRatingBar(fiveStar);
-	dispChocRatingBar(all_chocolates);
+	// for(let i = 0; i < 5; i++) {
+	// 	// dispChocRatingBar(i);
+	// }
+
+	// dispChocRatingBar(all_chocolates);
 	// dispChocRatingBar(threeStar);
 	console.log('len,',threeStar.length)
 	// dispChocRatingBar(threeStar);
