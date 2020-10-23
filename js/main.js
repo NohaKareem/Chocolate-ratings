@@ -1,24 +1,23 @@
 const VIS_HT = window.innerHeight * .7, VIS_WID = window.innerWidth * .45; //~
-const MAX_BOXES_PER_ROW = 20, MARGIN = 2.5;
-let currRow = 1, box_ht; //~
+const MAX_BOXES_PER_ROW = 25, MARGIN = 2.5;
+let currRow = 1, box_ht;
 
 var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 	console.log(dataset.length)
 
-	box_ht = VIS_HT / (dataset.length / MAX_BOXES_PER_ROW);
+	box_ht = VIS_HT / (dataset.length / MAX_BOXES_PER_ROW); //~
 
 	// data cleaning
 	let removePercent = str => { return parseFloat(str.slice(0, -1)); }
-	     console.log(dataset[0]['Company (Maker-if known)']);
 	let uniqueCocoaValues = [... new Set(dataset.map(choc => removePercent(choc['Cocoa Percent'])))];
 
 	// helper method to sort by cocoa
 	let sortChocByCocoa = (c1, c2) => { return removePercent(c2['Cocoa Percent']) - removePercent(c1['Cocoa Percent']) } 
 
-	var cocoaColorScale = d3.scaleLinear().domain([Math.min(...uniqueCocoaValues), Math.max(...uniqueCocoaValues)])//~
-			.range(["#bc8f8f", "#48240a"]);
+	var cocoaColorScale = d3.scaleLinear().domain([Math.min(...uniqueCocoaValues), Math.max(...uniqueCocoaValues)])
+		.range(["#bc8f8f", "#48240a"]);
 
-	// let sortChocByCocoa = (a,b) => { return parseFloat(b.Rating) - parseFloat(a.Rating) } 
+	// sort by rating
 	dataset.sort((a,b) => { return b.Rating - a.Rating });
 
 	// 5 stars
@@ -68,14 +67,14 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 	// container
 	var svg = d3.select('#vis')
 		.append('svg')
-		.attr('height', VIS_HT)
+		.attr('height', VIS_HT * 2)
 		.attr('width', VIS_WID)
 
 	//~ border http://bl.ocks.org/AndrewStaroscik/5222370
 	var borderPath = svg.append("rect")
 		.attr("x", 0)
 		.attr("y", 0)
-		.attr("height", VIS_HT)
+		.attr("height", VIS_HT * 2)
 		.attr("width", VIS_WID)
 		.style("stroke", 'red')
 		.style("fill", "none")
