@@ -90,16 +90,16 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 		.append('rect')
 
 		// debug
-		.attr('stroke', 'red')
+		.attr('stroke', '#3f2000')
 		.attr('stroke-width', '1')
 		
-		.attr('x', (d, i) => {	
+		.attr('y', (d, i) => {	
 			return (i);// * currWid;//~
 			// return (i % MAX_BOXES_PER_ROW) * currWid;
 			// return ((i % MAX_BOXES_PER_ROW) * 50); 
 			// return (i * all_chocolates.length / MAX_BOXES_PER_ROW) + (MARGIN * i); 
 		})
-		.attr('y', (d, i) => { return ((i % MAX_BOXES_PER_ROW) * MARGIN * BOX_HT); })// 
+		.attr('x', (d, i) => { return ((i % MAX_BOXES_PER_ROW) * MARGIN * BOX_HT); })// 
 		.attr('width', currWid * 5)//_ => { return currWid; } //return (all_chocolates.length / MAX_BOXES_PER_ROW) * MARGIN; })
 		.attr('height', BOX_HT * 2.2)
 		.attr('fill', (d) => { return cocoaColorScale(removePercent(d['Cocoa Percent'])); })
