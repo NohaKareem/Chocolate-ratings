@@ -122,9 +122,6 @@ var dataset = d3.csv('data/flavors_of_cacao.csv').get((dataset) => {
 			// 	.attr('x', VIS_WID + MARGIN * 5)
 			// 	.attr('y', (ratingDataset.length / MAX_BOXES_PER_ROW) * box_ht + MARGIN * 10 / 2)
 			// 	.attr('font-size', '50px')
-			// 	.attr('x', d=> {
-			// 		console.log('in text')
-			// 	})
 			// 	// .append('text');
 			// }
 
