@@ -1,11 +1,11 @@
 const VIS_HT = window.innerHeight * .7, VIS_WID = window.innerWidth * .45; //~
 const MAX_BOXES_PER_ROW = 25, MARGIN = 2.5;
-let currRow = 1, box_ht;
+let box_ht, prevRows = 0;
 
 var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 	console.log(dataset.length)
 
-	box_ht = VIS_HT / (dataset.length / MAX_BOXES_PER_ROW); //~
+	box_ht = (VIS_HT / (dataset.length / MAX_BOXES_PER_ROW)) * 2.1; //~2.1
 
 	// data cleaning
 	let removePercent = str => { return parseFloat(str.slice(0, -1)); }
@@ -84,6 +84,8 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 			return (choc.Rating >= rating && choc.Rating < rating + 1);
 		}).sort(sortChocByCocoa);
 
+		console.log('prevRows', prevRows)
+
 		svg.selectAll('rect')
 		.data(ratingDataseet)
 		.enter()
@@ -93,10 +95,10 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 		.attr('stroke', '#180c01')//3f2000~
 		.attr('stroke-width', '1')
 		
-		.attr('y', (d, i) => { return parseInt(i / MAX_BOXES_PER_ROW) * box_ht * 2.1 })
+		.attr('y', (d, i) => { return (parseInt(i / MAX_BOXES_PER_ROW) * box_ht)  }) //+ (prevRows * box_ht)
 		.attr('x', (d, i) => { return ((i % MAX_BOXES_PER_ROW) * currWid); })
 		.attr('width', currWid)
-		.attr('height', box_ht * 2.2)
+		.attr('height', box_ht)
 		.attr('fill', (d) => { return cocoaColorScale(removePercent(d['Cocoa Percent'])); })
 		
 		// mouse tooltip
@@ -118,13 +120,17 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 				.style('left', `${ d3.event.pageX }px`)
 				.style('top', `${ d3.event.pageY }px`);
 				
+
 			// sideToolTip.html(`Cocoa:  + ${ d['Cocoa Percent'] }`)
 			// 	.style('left', `${ d3.event.pageX }px`)
 			// 	.style('top', `${ d3.event.pageY }px`);
 		});
-
+		prevRows = ratingDataseet.length;
 	}
-	dispChocRatingBar(3);
+
+	for(let i = 5; i > 0; i--) {
+		dispChocRatingBar(i);
+	}
 
 	// dispChocRatingBar(fiveStar);
 	// for(let i = 0; i < 5; i++) {

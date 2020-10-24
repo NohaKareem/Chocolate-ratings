@@ -13,22 +13,27 @@ body {
     justify-content: space-between;
     margin: 5%;
 
+    .leftPanel { position: sticky; }
+
     h1 {
         font-size: 6rem;
         max-width: 20%;
         color: #696060;
+        position: fixed;
     }
 }
 
 .bold { font-weight: bold; }
 
+
 .tooltip {
-    margin-top: 5%;
+    margin-top: 35%;
+    font-size: 2rem;
     position: absolute;
     z-index: 3;
     height: 40%;
     width: 35%;//43~
-    // background-color: red;
+    position: fixed;
 }
 
 .mouseTooltip {
