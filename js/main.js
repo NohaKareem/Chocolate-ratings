@@ -8,7 +8,10 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 
 		// data cleaning (remove %, parse Cocoa Percent as float)
 		let removePercent = str => { return parseFloat(str.slice(0, -1)); }
-
+		countryCodesData.find(country => country.Name == "United States").Name = "U.S.A."
+		countryCodesData.find(country => country.Name == "United Kingdom").Name = "U.K."
+		countryCodesData.find(country => country.Name == "Viet Nam").Name = "Vietnam"
+		
 		// helper methods~ 
 		let sortChocByCocoa = (c1, c2) => { return removePercent(c2['Cocoa Percent']) - removePercent(c1['Cocoa Percent']) } 
 		
@@ -17,9 +20,9 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 		
 		// get country code from country name
 		let getCountryCode = countryName => countryCodesData.filter(country => {	
-				return country.Name == countryName;
+				return country.Name.includes(countryName);
 			})[0].Code.toLowerCase();
-		
+
 		// render rating stars
 		let renderStars = rating => {
 			console.log(rating)
@@ -41,7 +44,9 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 
 		// print tooltip/info bar data
 		let getTooltipData = d => {
-			return `
+				console.log(d['Broad Bean Origin'], d['Company Location'])
+				console.log(getCountryCode(d['Broad Bean Origin']), getCountryCode(d['Company Location']))
+				return `
 				<span class="bold">Cocoa:</span> ${ d['Cocoa Percent'] }
 				<br/>
 				<span class="bold">Rating:</span> ${ d['Rating'] }/5
