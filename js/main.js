@@ -2,8 +2,8 @@ const VIS_HT = window.innerHeight * .7, VIS_WID = window.innerWidth * .45;
 const MAX_BOXES_PER_ROW = 25, MARGIN = 2.5;
 let box_ht, prevRows = 0;
 
-var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
-	var countryCodes = d3.csv('country_codes.csv').get((countryCodesData) => {
+var dataset = d3.csv('data/flavors_of_cacao.csv').get((dataset) => {
+	var countryCodes = d3.csv('data/country_codes.csv').get((countryCodesData) => {
 		box_ht = (VIS_HT / (dataset.length / MAX_BOXES_PER_ROW) * 2);
 
 		// data cleaning (remove %, parse Cocoa Percent as float)
@@ -165,11 +165,11 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 		}
 
 		// rating-segmented view
-		for(let i = 5; i > 0; i--) {
-			renderChocRatingBar(i, false);
-		}
+		// for(let i = 5; i > 0; i--) {
+		// 	renderChocRatingBar(i, false);
+		// }
 
 		// full view
-		// renderChocRatingBar(sortedChcolates, true);
+		renderChocRatingBar(sortedChcolates, true);
 	});
 });
