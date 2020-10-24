@@ -19,7 +19,6 @@ body {
   font-size: 6rem;
   max-width: 20%;
   color: #696060;
-  position: fixed;
 }
 
 .bold {
@@ -27,13 +26,12 @@ body {
 }
 
 .tooltip {
-  margin-top: 35%;
+  margin-top: 5%;
   font-size: 2rem;
   position: absolute;
   z-index: 3;
   height: 40%;
-  width: 35%;
-  position: fixed;
+  width: 85%;
   line-height: 1.4;
 }
 

@@ -4,12 +4,10 @@ let box_ht, prevRows = 0;
 
 var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 	var countryCodes = d3.csv('country_codes.csv').get((countryCodesData) => {
-		console.log(countryCodesData)
-		box_ht = (VIS_HT / (dataset.length / MAX_BOXES_PER_ROW) * 2); //~2.1
-		console.log(dataset[0])
-		// data cleaning
+		box_ht = (VIS_HT / (dataset.length / MAX_BOXES_PER_ROW) * 2);
+
+		// data cleaning (remove %, parse Cocoa Percent as float)
 		let removePercent = str => { return parseFloat(str.slice(0, -1)); }
-		let uniqueCocoaValues = [... new Set(dataset.map(choc => removePercent(choc['Cocoa Percent'])))];
 
 		// helper methods~ 
 		let sortChocByCocoa = (c1, c2) => { return removePercent(c2['Cocoa Percent']) - removePercent(c1['Cocoa Percent']) } 
@@ -69,16 +67,17 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 				`;
 		}
 
+		// color scale
+		let uniqueCocoaValues = [... new Set(dataset.map(choc => removePercent(choc['Cocoa Percent'])))];
 		var cocoaColorScale = d3.scaleLinear().domain([Math.min(...uniqueCocoaValues), Math.max(...uniqueCocoaValues)])
 			.range(["#bc8f8f", "#48240a"]);
 
-		// sort by rating//~
-		dataset.sort((a,b) => { return b.Rating - a.Rating });
-		
+		// tooltip
 		let mouseToolTip = d3.select('#vis').append('div')
 			.attr('class', 'mouseTooltip')
 			.style('opacity', 0)
 		
+		// info bar
 		let sideToolTip = d3.select('.tooltip')
 			.append('div')
 			.attr('class', 'clickInfo')
@@ -115,11 +114,10 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 			.enter()
 			.append('rect')
 
-			// debug
 			.attr('stroke', '#180c01')
 			.attr('stroke-width', '1')
 			
-			.attr('y', (d, i) => { return (parseInt(i / MAX_BOXES_PER_ROW) * box_ht) }) // + (prevRows * box_ht)
+			.attr('y', (d, i) => { return (parseInt(i / MAX_BOXES_PER_ROW) * box_ht) }) // + (prevRows * box_ht)~
 			.attr('x', (d, i) => { return ((i % MAX_BOXES_PER_ROW) * currWid); })
 			.attr('width', currWid)
 			.attr('height', box_ht)
@@ -141,11 +139,9 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 					.style('opacity', 1);
 
 				sideToolTip.html(getTooltipData(d));
-			})
-			;
-			prevRows += svg.style('height');//ratingDataset.length;
-			// console.log('ratingDdataset.length', ratingDataset.length * box_ht)
-			console.log('svg ht', svg.style('height'))
+			});
+
+			prevRows += svg.style('height');//ratingDataset.length;~
 		}
 
 		// for(let i = 5; i > 0; i--) {
