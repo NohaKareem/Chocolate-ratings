@@ -93,10 +93,15 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 					<span class="bold">Bean Origin/Bar Name:</span> ${ d['Specific Bean Origin or Bar Name'] } 
 					<br/> 
 					${ d['Bean Type'].length > 1 ? `<span class="bold">Bean Type:</span>: ${ d['Bean Type'] }<br/>` : `` } 
-					<span class="bold">Broad Bean Origin:</span> ${ d['Broad Bean Origin'] } 
+					<div class="flagRow">
+						<span class="bold">Broad Bean Origin:</span> ${ d['Broad Bean Origin'] } 
+						<img src="https://lipis.github.io/flag-icon-css/flags/4x3/${ getCountryCode(d['Broad Bean Origin']) }.svg" alt=" ${ d['Company Location'] } flag" style="width:40px">
+					</div>
 					<br/> 
-					<span class="bold">Company Location:</span> ${ d['Company Location'] }
-					<img src="https://lipis.github.io/flag-icon-css/flags/4x3/${ getCountryCode(d['Company Location']) }.svg" alt=" ${ d['Company Location'] } flag" style="width:40px">
+					<div class="flagRow">
+						<span class="bold">Company Location:</span> ${ d['Company Location'] }
+						<img src="https://lipis.github.io/flag-icon-css/flags/4x3/${ getCountryCode(d['Company Location']) }.svg" alt=" ${ d['Company Location'] } flag" style="width:40px">
+					</div>
 					<br/> 
 					`)
 					.style('left', `${ d3.event.pageX }px`)

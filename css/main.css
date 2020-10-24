@@ -45,4 +45,14 @@ body {
   padding: 10px;
 }
 
+.flagRow {
+  display: flex;
+  justify-content: start;
+  align-content: center;
+  flex-wrap: wrap;
+}
+.flagRow img {
+  margin-left: 3%;
+}
+
 /*# sourceMappingURL=main.css.map */

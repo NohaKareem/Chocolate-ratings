@@ -44,3 +44,13 @@ body {
     border-radius: 5px;
     padding: 10px;
 }
+
+.flagRow { 
+    display: flex;
+    justify-content: start;
+    align-content: center;
+    flex-wrap: wrap;
+    img {
+        margin-left: 3%;
+    }
+}
