@@ -1,4 +1,4 @@
-const VIS_HT = window.innerHeight * .7, VIS_WID = window.innerWidth * .45; //~
+const VIS_HT = window.innerHeight * .7, VIS_WID = window.innerWidth * .45; 
 const MAX_BOXES_PER_ROW = 25, MARGIN = 2.5;
 let box_ht, prevRows = 0;
 
@@ -16,11 +16,12 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 		countryCodesData.find(country => country.Name == "Trinidad and Tobago").Name = "Trinidad, Tobago";
 		countryCodesData.push({ Name: 'Hawaii', Code: 'US' });
 		
-		// Account for typos
+		// account for typos
 		countryCodesData.push({ Name: 'Domincan Republic', Code: 'DO' });
 		countryCodesData.push({ Name: 'Cost Rica', Code: 'CR' });
 		
-		// helper methods~ 
+		// helper methods
+		// sort chocolates by cocoa 
 		let sortChocByCocoa = (c1, c2) => { return removePercent(c2['Cocoa Percent']) - removePercent(c1['Cocoa Percent']) } 
 		
 		// sort chocolates by rating, then cocoa percent
@@ -94,71 +95,78 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 			.attr('class', 'clickInfo')
 			.style('opacity', 0)
 
-		// container
-		let svg = d3.select('#vis')
-			.append('svg')
-			.attr('height', VIS_HT * 2)
-			.attr('width', VIS_WID)
-
-		//~ border http://bl.ocks.org/AndrewStaroscik/5222370
-		let borderPath = svg.append("rect")
-			.attr("x", 0)
-			.attr("y", 0)
-			.attr("height", VIS_HT * 2)
-			.attr("width", VIS_WID)
-			.style("stroke", 'red')
-			.style("fill", "none")
-			.style("stroke-width", 1);
-		//~
-
-		let currWid = VIS_WID / MAX_BOXES_PER_ROW;
+		let boxWid = VIS_WID / MAX_BOXES_PER_ROW;
 		
-		renderChocRatingBar = rating => {
-			// let ratingDataset = dataset.filter(choc => {
-			// 	return (choc.Rating >= rating && choc.Rating < rating + 1);
-			// }).sort(sortChocByCocoa);
+		renderChocRatingBar = (rating, isFullDataset) => {
+			let ratingDataset = rating;
 
-			console.log('prevRows', prevRows)
+			// generate partial datasets per ranking
+			if (!isFullDataset) {
+				ratingDataset = dataset.filter(choc => {
+					return (choc.Rating >= rating && choc.Rating < rating + 1);
+				}).sort(sortChocByCocoa);
+			}
+
+			// container
+			let svg = d3.select('#vis')
+				.append('svg')
+				.attr('height', (ratingDataset.length / MAX_BOXES_PER_ROW) * box_ht + MARGIN * 10)
+				.attr('width', VIS_WID);
+			
+			if(!isFullDataset) {
+				let ratingLabels = 
+				svg.append('text')
+				// d3.select('#vis')
+				// .selectAll('text')
+				.data(rating)
+				.enter()
+				.attr('x', VIS_WID + MARGIN * 5)
+				.attr('y', (ratingDataset.length / MAX_BOXES_PER_ROW) * box_ht + MARGIN * 10 / 2)
+				.attr('font-size', '50px')
+				.attr('x', d=> {
+					console.log('in text')
+				})
+				// .append('text');
+			}
 
 			svg.selectAll('rect')
-			// .data(ratingDataset)
-			.data(rating)
-			.enter()
-			.append('rect')
+				.data(ratingDataset)
+				.enter()
+				.append('rect')
 
-			.attr('stroke', '#180c01')
-			.attr('stroke-width', '1')
-			
-			.attr('y', (d, i) => { return (parseInt(i / MAX_BOXES_PER_ROW) * box_ht) }) // + (prevRows * box_ht)~
-			.attr('x', (d, i) => { return ((i % MAX_BOXES_PER_ROW) * currWid); })
-			.attr('width', currWid)
-			.attr('height', box_ht)
-			.attr('fill', (d) => { return cocoaColorScale(removePercent(d['Cocoa Percent'])); })
-			
-			// mouse tooltip
-			.on('mouseover', d => {
-				mouseToolTip.transition()
-					.duration(250)
-					.style('opacity', 1);
+				.attr('stroke', '#180c01')
+				.attr('stroke-width', '1')
+				
+				.attr('y', (d, i) => { return (parseInt(i / MAX_BOXES_PER_ROW) * box_ht) }) 
+				.attr('x', (d, i) => { return ((i % MAX_BOXES_PER_ROW) * boxWid); })
+				.attr('width', boxWid)
+				.attr('height', box_ht)
+				.attr('fill', (d) => { return cocoaColorScale(removePercent(d['Cocoa Percent'])); })
+				
+				// mouse tooltip
+				.on('mouseover', d => {
+					mouseToolTip.transition()
+						.duration(250)
+						.style('opacity', 1);
 
-				mouseToolTip.html(getTooltipData(d))
-					.style('left', `${ d3.event.pageX }px`)
-					.style('top', `${ d3.event.pageY }px`);
-			})
-			.on('click', d => {
-				sideToolTip.transition()
-					.duration(250)
-					.style('opacity', 1);
+					mouseToolTip.html(getTooltipData(d))
+						.style('left', `${ d3.event.pageX }px`)
+						.style('top', `${ d3.event.pageY }px`);
+				})
 
-				sideToolTip.html(getTooltipData(d));
-			});
+				// side info bar
+				.on('click', d => {
+					sideToolTip.transition()
+						.duration(250)
+						.style('opacity', 1);
 
-			prevRows += svg.style('height');//ratingDataset.length;~
+					sideToolTip.html(getTooltipData(d));
+				});
 		}
 
 		// for(let i = 5; i > 0; i--) {
-		// 	renderChocRatingBar(i);
+		// 	renderChocRatingBar(i, false);
 		// }
-		renderChocRatingBar(sortedChcolates);
+		renderChocRatingBar(sortedChcolates, true);
 	});
 });
