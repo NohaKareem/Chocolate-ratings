@@ -114,7 +114,6 @@ var dataset = d3.csv('data/flavors_of_cacao.csv').get((dataset) => {
 				.attr('width', VIS_WID);
 			
 			// if(!isFullDataset) {
-			// 	let ratingLabels = 
 			// 	svg.append('text')
 			// 	// d3.select('#vis')
 			// 	// .selectAll('text')
