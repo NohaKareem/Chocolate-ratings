@@ -113,21 +113,21 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 				.attr('height', (ratingDataset.length / MAX_BOXES_PER_ROW) * box_ht + MARGIN * 10)
 				.attr('width', VIS_WID);
 			
-			if(!isFullDataset) {
-				let ratingLabels = 
-				svg.append('text')
-				// d3.select('#vis')
-				// .selectAll('text')
-				.data(rating)
-				.enter()
-				.attr('x', VIS_WID + MARGIN * 5)
-				.attr('y', (ratingDataset.length / MAX_BOXES_PER_ROW) * box_ht + MARGIN * 10 / 2)
-				.attr('font-size', '50px')
-				.attr('x', d=> {
-					console.log('in text')
-				})
-				// .append('text');
-			}
+			// if(!isFullDataset) {
+			// 	let ratingLabels = 
+			// 	svg.append('text')
+			// 	// d3.select('#vis')
+			// 	// .selectAll('text')
+			// 	.data(rating)
+			// 	.enter()
+			// 	.attr('x', VIS_WID + MARGIN * 5)
+			// 	.attr('y', (ratingDataset.length / MAX_BOXES_PER_ROW) * box_ht + MARGIN * 10 / 2)
+			// 	.attr('font-size', '50px')
+			// 	.attr('x', d=> {
+			// 		console.log('in text')
+			// 	})
+			// 	// .append('text');
+			// }
 
 			svg.selectAll('rect')
 				.data(ratingDataset)
@@ -164,9 +164,12 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 				});
 		}
 
-		// for(let i = 5; i > 0; i--) {
-		// 	renderChocRatingBar(i, false);
-		// }
-		renderChocRatingBar(sortedChcolates, true);
+		// rating-segmented view
+		for(let i = 5; i > 0; i--) {
+			renderChocRatingBar(i, false);
+		}
+
+		// full view
+		// renderChocRatingBar(sortedChcolates, true);
 	});
 });
