@@ -8,9 +8,17 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 
 		// data cleaning (remove %, parse Cocoa Percent as float)
 		let removePercent = str => { return parseFloat(str.slice(0, -1)); }
-		countryCodesData.find(country => country.Name == "United States").Name = "U.S.A."
-		countryCodesData.find(country => country.Name == "United Kingdom").Name = "U.K."
-		countryCodesData.find(country => country.Name == "Viet Nam").Name = "Vietnam"
+
+		// data cleaning (matching country names to those mentioned in chocolate dataset, for consistency)
+		countryCodesData.find(country => country.Name == "United States").Name = "U.S.A.";
+		countryCodesData.find(country => country.Name == "United Kingdom").Name = "U.K.";
+		countryCodesData.find(country => country.Name == "Viet Nam").Name = "Vietnam";
+		countryCodesData.find(country => country.Name == "Trinidad and Tobago").Name = "Trinidad, Tobago";
+		countryCodesData.push({ Name: 'Hawaii', Code: 'US' });
+		
+		// Account for typos
+		countryCodesData.push({ Name: 'Domincan Republic', Code: 'DO' });
+		countryCodesData.push({ Name: 'Cost Rica', Code: 'CR' });
 		
 		// helper methods~ 
 		let sortChocByCocoa = (c1, c2) => { return removePercent(c2['Cocoa Percent']) - removePercent(c1['Cocoa Percent']) } 
@@ -19,13 +27,13 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 		let sortedChcolates = dataset.sort((c1, c2) => { return c2.Rating - c1.Rating || removePercent(c2['Cocoa Percent']) - removePercent(c1['Cocoa Percent']) });
 		
 		// get country code from country name
-		let getCountryCode = countryName => countryCodesData.filter(country => {	
-				return country.Name.includes(countryName);
+		let getCountryCode = countryName => countryCodesData.filter(country => {
+			// console.log('testing', countryName)	
+				return (country.Name).toLowerCase().includes(countryName.toLowerCase());
 			})[0].Code.toLowerCase();
 
 		// render rating stars
 		let renderStars = rating => {
-			console.log(rating)
 			let starStr = "";
 			for(let i = 0; i < parseInt(rating); i++) { 
 				starStr += `<i class="fa fa-star" aria-hidden="true"></i>`;
@@ -44,8 +52,6 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 
 		// print tooltip/info bar data
 		let getTooltipData = d => {
-				console.log(d['Broad Bean Origin'], d['Company Location'])
-				console.log(getCountryCode(d['Broad Bean Origin']), getCountryCode(d['Company Location']))
 				return `
 				<span class="bold">Cocoa:</span> ${ d['Cocoa Percent'] }
 				<br/>
@@ -89,13 +95,13 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 			.style('opacity', 0)
 
 		// container
-		var svg = d3.select('#vis')
+		let svg = d3.select('#vis')
 			.append('svg')
 			.attr('height', VIS_HT * 2)
 			.attr('width', VIS_WID)
 
 		//~ border http://bl.ocks.org/AndrewStaroscik/5222370
-		var borderPath = svg.append("rect")
+		let borderPath = svg.append("rect")
 			.attr("x", 0)
 			.attr("y", 0)
 			.attr("height", VIS_HT * 2)
@@ -107,7 +113,7 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 
 		let currWid = VIS_WID / MAX_BOXES_PER_ROW;
 		
-		dispChocRatingBar = rating => {
+		renderChocRatingBar = rating => {
 			// let ratingDataset = dataset.filter(choc => {
 			// 	return (choc.Rating >= rating && choc.Rating < rating + 1);
 			// }).sort(sortChocByCocoa);
@@ -115,6 +121,7 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 			console.log('prevRows', prevRows)
 
 			svg.selectAll('rect')
+			// .data(ratingDataset)
 			.data(rating)
 			.enter()
 			.append('rect')
@@ -150,8 +157,8 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 		}
 
 		// for(let i = 5; i > 0; i--) {
-		// 	dispChocRatingBar(i);
+		// 	renderChocRatingBar(i);
 		// }
-		dispChocRatingBar(sortedChcolates);
+		renderChocRatingBar(sortedChcolates);
 	});
 });
