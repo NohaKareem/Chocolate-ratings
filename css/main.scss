@@ -5,7 +5,6 @@
 body {
     background-color: #ffdfdf;
     font-family: 'Pinyon Script', cursive;
-    // font-family: 'Cormorant Garamond', serif;
 }
 
 .container {
@@ -25,15 +24,15 @@ body {
 
 .bold { font-weight: bold; }
 
-
 .tooltip {
     margin-top: 35%;
     font-size: 2rem;
     position: absolute;
     z-index: 3;
     height: 40%;
-    width: 35%;//43~
+    width: 35%;
     position: fixed;
+    line-height: 1.4;
 }
 
 .mouseTooltip {

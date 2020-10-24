@@ -11,12 +11,35 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 		let removePercent = str => { return parseFloat(str.slice(0, -1)); }
 		let uniqueCocoaValues = [... new Set(dataset.map(choc => removePercent(choc['Cocoa Percent'])))];
 
-		// helper methods 
+		// helper methods~ 
 		let sortChocByCocoa = (c1, c2) => { return removePercent(c2['Cocoa Percent']) - removePercent(c1['Cocoa Percent']) } 
+		
+		// sort chocolates by rating, then cocoa percent
 		let sortedChcolates = dataset.sort((c1, c2) => { return c2.Rating - c1.Rating || removePercent(c2['Cocoa Percent']) - removePercent(c1['Cocoa Percent']) });
+		
+		// get country code from country name
 		let getCountryCode = countryName => countryCodesData.filter(country => {	
 				return country.Name == countryName;
 			})[0].Code.toLowerCase();
+		
+		// render rating stars
+		let renderStars = rating => {
+			console.log(rating)
+			let starStr = "";
+			for(let i = 0; i < parseInt(rating); i++) { 
+				starStr += `<i class="fa fa-star" aria-hidden="true"></i>`;
+			}
+			
+			// partial stars
+			if(rating - parseInt(rating) > 0) starStr += `<i class="fa fa-star-half-o" aria-hidden="true"></i>`;
+			
+			// empty stars
+			let emptyStars = 5 - Math.ceil(rating);
+			for(let i = 0; i < emptyStars; i++) {
+				starStr += `<i class="fa fa-star-o" aria-hidden="true"></i>`;
+			}
+			return starStr;
+		}
 
 		var cocoaColorScale = d3.scaleLinear().domain([Math.min(...uniqueCocoaValues), Math.max(...uniqueCocoaValues)])
 			.range(["#bc8f8f", "#48240a"]);
@@ -84,6 +107,7 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 					<span class="bold">Cocoa:</span> ${ d['Cocoa Percent'] }
 					<br/>
 					<span class="bold">Rating:</span> ${ d['Rating'] }/5
+					${ renderStars(d['Rating']) }
 					<br/>
 					<span class="bold">Company:</span> ${ d['Company (Maker-if known)'] } 
 					<br/> 
@@ -111,7 +135,6 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 				// 	.style('top', `${ d3.event.pageY }px`);
 			})
 			.on('click', d => {
-				console.log('in click')
 				sideToolTip.transition()
 					.duration(250)
 					.style('opacity', 1);
@@ -119,7 +142,8 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 				sideToolTip.html(`
 					<span class="bold">Cocoa:</span> ${ d['Cocoa Percent'] }
 					<br/>
-					<span class="bold">Rating:</span> ${ d['Rating'] }/5
+					<span class="bold">Rating:</span> ${ d['Rating'] }/5 
+					${ renderStars(d['Rating']) }
 					<br/>
 					<span class="bold">Company:</span> ${ d['Company (Maker-if known)'] } 
 					<br/> 
