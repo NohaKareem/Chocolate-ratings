@@ -134,10 +134,6 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 				mouseToolTip.html(getTooltipData(d))
 					.style('left', `${ d3.event.pageX }px`)
 					.style('top', `${ d3.event.pageY }px`);
-
-				// sideToolTip.html(`Cocoa:  + ${ d['Cocoa Percent'] }`)
-				// 	.style('left', `${ d3.event.pageX }px`)
-				// 	.style('top', `${ d3.event.pageY }px`);
 			})
 			.on('click', d => {
 				sideToolTip.transition()
@@ -156,21 +152,5 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 		// 	dispChocRatingBar(i);
 		// }
 		dispChocRatingBar(sortedChcolates);
-		
-		// container
-		var flags = d3.select('.tooltip')
-			.append('svg')
-			.attr('height', 500)
-			.attr('width', 500);
-
-		// svg.selectAll('rect')
-		// 	.data(countryCodes)
-		// 	.enter()
-		// 	.append('rect')
-		// 	.attr('width', currWid * 15)
-		// 	.attr('height', box_ht * 12.2)
-		// 	.attr('y', _ => {
-		// 		console.log('country')
-		// 	});
 	});
 });
