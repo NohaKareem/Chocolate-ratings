@@ -41,6 +41,34 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 			return starStr;
 		}
 
+		// print tooltip/info bar data
+		let getTooltipData = d => {
+			return `
+				<span class="bold">Cocoa:</span> ${ d['Cocoa Percent'] }
+				<br/>
+				<span class="bold">Rating:</span> ${ d['Rating'] }/5
+				${ renderStars(d['Rating']) }
+				<br/>
+				<span class="bold">Company:</span> ${ d['Company (Maker-if known)'] } 
+				<br/> 
+				<span class="bold">Review Date:</span> ${ d['Review Date'] } 
+				<br/> 
+				<span class="bold">Bean Origin/Bar Name:</span> ${ d['Specific Bean Origin or Bar Name'] } 
+				<br/> 
+				${ d['Bean Type'].length > 1 ? `<span class="bold">Bean Type:</span>: ${ d['Bean Type'] }<br/>` : `` } 
+				<div class="flagRow">
+					<span class="bold">Broad Bean Origin:</span> ${ d['Broad Bean Origin'] } 
+					<img src="https://lipis.github.io/flag-icon-css/flags/4x3/${ getCountryCode(d['Broad Bean Origin']) }.svg" alt=" ${ d['Company Location'] } flag" style="width:40px">
+				</div>
+				<br/> 
+				<div class="flagRow">
+					<span class="bold">Company Location:</span> ${ d['Company Location'] }
+					<img src="https://lipis.github.io/flag-icon-css/flags/4x3/${ getCountryCode(d['Company Location']) }.svg" alt=" ${ d['Company Location'] } flag" style="width:40px">
+				</div>
+				<br/>
+				`;
+		}
+
 		var cocoaColorScale = d3.scaleLinear().domain([Math.min(...uniqueCocoaValues), Math.max(...uniqueCocoaValues)])
 			.range(["#bc8f8f", "#48240a"]);
 
@@ -103,30 +131,7 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 					.duration(250)
 					.style('opacity', 1);
 
-				mouseToolTip.html(`
-					<span class="bold">Cocoa:</span> ${ d['Cocoa Percent'] }
-					<br/>
-					<span class="bold">Rating:</span> ${ d['Rating'] }/5
-					${ renderStars(d['Rating']) }
-					<br/>
-					<span class="bold">Company:</span> ${ d['Company (Maker-if known)'] } 
-					<br/> 
-					<span class="bold">Review Date:</span> ${ d['Review Date'] } 
-					<br/> 
-					<span class="bold">Bean Origin/Bar Name:</span> ${ d['Specific Bean Origin or Bar Name'] } 
-					<br/> 
-					${ d['Bean Type'].length > 1 ? `<span class="bold">Bean Type:</span>: ${ d['Bean Type'] }<br/>` : `` } 
-					<div class="flagRow">
-						<span class="bold">Broad Bean Origin:</span> ${ d['Broad Bean Origin'] } 
-						<img src="https://lipis.github.io/flag-icon-css/flags/4x3/${ getCountryCode(d['Broad Bean Origin']) }.svg" alt=" ${ d['Company Location'] } flag" style="width:40px">
-					</div>
-					<br/> 
-					<div class="flagRow">
-						<span class="bold">Company Location:</span> ${ d['Company Location'] }
-						<img src="https://lipis.github.io/flag-icon-css/flags/4x3/${ getCountryCode(d['Company Location']) }.svg" alt=" ${ d['Company Location'] } flag" style="width:40px">
-					</div>
-					<br/> 
-					`)
+				mouseToolTip.html(getTooltipData(d))
 					.style('left', `${ d3.event.pageX }px`)
 					.style('top', `${ d3.event.pageY }px`);
 
@@ -139,30 +144,7 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 					.duration(250)
 					.style('opacity', 1);
 
-				sideToolTip.html(`
-					<span class="bold">Cocoa:</span> ${ d['Cocoa Percent'] }
-					<br/>
-					<span class="bold">Rating:</span> ${ d['Rating'] }/5 
-					${ renderStars(d['Rating']) }
-					<br/>
-					<span class="bold">Company:</span> ${ d['Company (Maker-if known)'] } 
-					<br/> 
-					<span class="bold">Review Date:</span> ${ d['Review Date'] } 
-					<br/> 
-					<span class="bold">Bean Origin/Bar Name:</span> ${ d['Specific Bean Origin or Bar Name'] } 
-					<br/> 
-					${ d['Bean Type'].length > 1 ? `<span class="bold">Bean Type:</span>: ${ d['Bean Type'] }<br/>` : `` } 
-					<div class="flagRow">
-						<span class="bold">Broad Bean Origin:</span> ${ d['Broad Bean Origin'] } 
-						<img src="https://lipis.github.io/flag-icon-css/flags/4x3/${ getCountryCode(d['Broad Bean Origin']) }.svg" alt=" ${ d['Company Location'] } flag" style="width:40px">
-					</div>
-					<br/> 
-					<div class="flagRow">
-						<span class="bold">Company Location:</span> ${ d['Company Location'] }
-						<img src="https://lipis.github.io/flag-icon-css/flags/4x3/${ getCountryCode(d['Company Location']) }.svg" alt=" ${ d['Company Location'] } flag" style="width:40px">
-					</div>
-					<br/> 
-				`);
+				sideToolTip.html(getTooltipData(d));
 			})
 			;
 			prevRows += svg.style('height');//ratingDataset.length;
