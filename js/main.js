@@ -11,8 +11,12 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 		let removePercent = str => { return parseFloat(str.slice(0, -1)); }
 		let uniqueCocoaValues = [... new Set(dataset.map(choc => removePercent(choc['Cocoa Percent'])))];
 
-		// helper method to sort by cocoa
+		// helper methods 
 		let sortChocByCocoa = (c1, c2) => { return removePercent(c2['Cocoa Percent']) - removePercent(c1['Cocoa Percent']) } 
+		let sortedChcolates = dataset.sort((c1, c2) => { return c2.Rating - c1.Rating || removePercent(c2['Cocoa Percent']) - removePercent(c1['Cocoa Percent']) });
+		let getCountryCode = countryName => countryCodesData.filter(country => {	
+				return country.Name == countryName;
+			})[0].Code.toLowerCase();
 
 		var cocoaColorScale = d3.scaleLinear().domain([Math.min(...uniqueCocoaValues), Math.max(...uniqueCocoaValues)])
 			.range(["#bc8f8f", "#48240a"]);
@@ -20,7 +24,6 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 		// sort by rating
 		dataset.sort((a,b) => { return b.Rating - a.Rating });
 
-		let sortedChcolates = dataset.sort((c1, c2) => { return c2.Rating - c1.Rating || removePercent(c2['Cocoa Percent']) - removePercent(c1['Cocoa Percent']) });
 		
 		let mouseToolTip = d3.select('#vis').append('div')
 			.attr('class', 'mouseTooltip')
@@ -90,7 +93,10 @@ var dataset = d3.csv('flavors_of_cacao.csv').get((dataset) => {
 					<span class="bold">Bean Origin/Bar Name:</span> ${ d['Specific Bean Origin or Bar Name'] } 
 					<br/> 
 					${ d['Bean Type'].length > 1 ? `<span class="bold">Bean Type:</span>: ${ d['Bean Type'] }<br/>` : `` } 
-					<span class="bold">Bean Origin/Bar Name:</span> ${ d['Specific Bean Origin or Bar Name'] } 
+					<span class="bold">Broad Bean Origin:</span> ${ d['Broad Bean Origin'] } 
+					<br/> 
+					<span class="bold">Company Location:</span> ${ d['Company Location'] }
+					<img src="https://lipis.github.io/flag-icon-css/flags/4x3/${ getCountryCode(d['Company Location']) }.svg" alt=" ${ d['Company Location'] } flag" style="width:40px">
 					<br/> 
 					`)
 					.style('left', `${ d3.event.pageX }px`)
