@@ -163,8 +163,8 @@ var dataset = d3.csv('data/flavors_of_cacao.csv').get((dataset) => {
 					sideToolTip.html(getTooltipData(d));
 				});
 		}
-
-		// rating-segmented view
+	
+		// // rating-segmented view
 		// for(let i = 5; i > 0; i--) {
 		// 	renderChocRatingBar(i, false);
 		// }
